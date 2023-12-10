@@ -28,14 +28,16 @@ const mutations = {
 }
 
 const actions = {
-  // user login
+  // 用户登录
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { phone, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ phone: phone.trim(), password: password }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        console.log('data', data)
+        commit('SET_TOKEN', data)
+        setToken(data)
+        console.log('成功设置token')
         resolve()
       }).catch(error => {
         reject(error)
@@ -43,19 +45,21 @@ const actions = {
     })
   },
 
-  // get user info
+  // 获取用户信息
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
+        console.log('data', data)
+        console.log('response', response)
 
         if (!data) {
-          return reject('Verification failed, please Login again.')
+          return reject('验证失败，请重新登陆')
         }
 
-        const { name, avatar } = data
+        const { nickName, avatar } = data
 
-        commit('SET_NAME', name)
+        commit('SET_NAME', nickName)
         commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {
@@ -64,7 +68,7 @@ const actions = {
     })
   },
 
-  // user logout
+  // 登出
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {

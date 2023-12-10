@@ -3,7 +3,7 @@
     <el-table
       v-loading="listLoading"
       :data="list"
-      element-loading-text="Loading"
+      element-loading-text="拼命加载中..."
       border
       fit
       highlight-current-row
@@ -13,12 +13,13 @@
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column label="Title">
+      
+      <el-table-column label="标题">
         <template slot-scope="scope">
           {{ scope.row.title }}
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
+      <el-table-column label="发布者" width="110" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
         </template>
@@ -44,7 +45,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { getActiveList } from '@/api/table'
 
 export default {
   filters: {
@@ -69,8 +70,10 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
+      getActiveList().then(response => {
+        console.log('list1', response)
+        this.list = response.data.list
+        console.log('list2', response.data.list)
         this.listLoading = false
       })
     }
